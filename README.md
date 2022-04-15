@@ -12,7 +12,7 @@ $ npm install -g global-git-clone
 $ global-git-clone COMMAND
 running command...
 $ global-git-clone (--version)
-global-git-clone/0.1.0 darwin-x64 node-v16.13.0
+global-git-clone/1.0.1-beta.0 darwin-x64 node-v16.13.0
 $ global-git-clone --help [COMMAND]
 USAGE
   $ global-git-clone COMMAND
@@ -30,6 +30,7 @@ USAGE
 * [`global-git-clone template ls`](#global-git-clone-template-ls)
 * [`global-git-clone template remove [NAME]`](#global-git-clone-template-remove-name)
 * [`global-git-clone template rm [NAME]`](#global-git-clone-template-rm-name)
+* [`global-git-clone update [CHANNEL]`](#global-git-clone-update-channel)
 
 ## `global-git-clone clone <repo>`
 
@@ -58,7 +59,7 @@ EXAMPLES
   $ global-git-clone clone git@gtihub.com:natonathan/global-git-clone.git --template "~/git/{provider}/{owner}/{repo}"
 ```
 
-_See code: [dist/commands/clone.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.0/dist/commands/clone.ts)_
+_See code: [dist/commands/clone.ts](https://github.com/NatoNathan/global-git-clone/blob/v1.0.1-beta.0/dist/commands/clone.ts)_
 
 ## `global-git-clone config`
 
@@ -81,7 +82,7 @@ EXAMPLES
   $ global-git-clone config
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v1.0.1-beta.0/dist/commands/config/index.ts)_
 
 ## `global-git-clone help [COMMAND]`
 
@@ -138,7 +139,7 @@ EXAMPLES
   $ global-git-clone template
 ```
 
-_See code: [dist/commands/template/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.0/dist/commands/template/index.ts)_
+_See code: [dist/commands/template/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v1.0.1-beta.0/dist/commands/template/index.ts)_
 
 ## `global-git-clone template add [NAME]`
 
@@ -293,4 +294,41 @@ ALIASES
 EXAMPLES
   $ global-git-clone template rm
 ```
+
+## `global-git-clone update [CHANNEL]`
+
+update the global-git-clone CLI
+
+```
+USAGE
+  $ global-git-clone update [CHANNEL] [-a] [-v <value> | -i] [--force]
+
+FLAGS
+  -a, --available        Install a specific version.
+  -i, --interactive      Interactively select version to install. This is ignored if a channel is provided.
+  -v, --version=<value>  Install a specific version.
+  --force                Force a re-download of the requested version.
+
+DESCRIPTION
+  update the global-git-clone CLI
+
+EXAMPLES
+  Update to the stable channel:
+
+    $ global-git-clone update stable
+
+  Update to a specific version:
+
+    $ global-git-clone update --version 1.0.0
+
+  Interactively select version:
+
+    $ global-git-clone update --interactive
+
+  See available versions:
+
+    $ global-git-clone update --available
+```
+
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.0/src/commands/update.ts)_
 <!-- commandsstop -->
