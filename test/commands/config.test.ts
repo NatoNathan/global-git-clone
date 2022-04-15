@@ -1,17 +1,10 @@
-import {expect, test} from '@oclif/test'
+import {expect, test} from '@oclif/test';
 
 describe('config', () => {
   test
   .stdout()
-  .command(['config'])
-  .it('runs hello', ctx => {
-    expect(ctx.stdout).to.contain('hello world')
-  })
-
-  test
-  .stdout()
-  .command(['config', '--name', 'jeff'])
-  .it('runs hello --name jeff', ctx => {
-    expect(ctx.stdout).to.contain('hello jeff')
-  })
-})
+  .command(['config', '--config="test/fixtures/config.json"'])
+  .it('runs config', ctx => {
+    expect(ctx.stdout).to.contain('Getting config file from:');
+  });
+});

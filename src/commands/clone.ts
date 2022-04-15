@@ -40,7 +40,7 @@ export default class Clone extends Base {
 
   private async clone(repo: string, path: string): Promise<void> {
     CliUx.ux.action.start(`Cloning ${repo} to ${path}`);
-    if (this.flags.dryRun) {
+    if (this.flags['dry-run']) {
       this.log('Dry run, skipping...', LogLevel.INFO);
       this.log(`git clone ${repo} ${path}`, LogLevel.DEBUG);
     } else {

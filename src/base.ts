@@ -25,7 +25,9 @@ export default abstract class extends Command {
     const userConfig = await fs.readJSON(configPath).catch(() => {
       return {};
     });
-    userConfig.templates.default = userConfig.templates?.default || '~/git/{provider}/{owner}/{repo}';
+    userConfig.templates = Object.assign({}, {
+      default: '~/git/{provider}/{owner}/{repo}',
+    },  userConfig.templates);
     userConfig.configPath = configPath;
     return userConfig;
   }

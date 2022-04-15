@@ -1,17 +1,10 @@
-import {expect, test} from '@oclif/test'
+import {expect, test} from '@oclif/test';
 
 describe('clone', () => {
   test
   .stdout()
-  .command(['clone'])
-  .it('runs hello', ctx => {
-    expect(ctx.stdout).to.contain('hello world')
-  })
-
-  test
-  .stdout()
-  .command(['clone', '--name', 'jeff'])
-  .it('runs hello --name jeff', ctx => {
-    expect(ctx.stdout).to.contain('hello jeff')
-  })
-})
+  .command(['clone', '"git@github.com:natonathan/global-git-clone.git"', '-v', '--dry-run', '--config="test/fixtures/config.json"'])
+  .it('runs clone', ctx => {
+    expect(ctx.stdout).to.contain('Applying template default');
+  });
+});
