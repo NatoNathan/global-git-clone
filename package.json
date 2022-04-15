@@ -1,6 +1,6 @@
 {
   "name": "global-git-clone",
-  "version": "1.0.1-beta.0",
+  "version": "0.1.0",
   "description": "global-git-clone is a command line tool that allows you to clone git repositories to your projects directory following a specific naming convention.",
   "author": "Nathan Tamez",
   "bin": {
@@ -68,7 +68,8 @@
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version major && git push origin && git push origin --tags",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version minor && git push origin && git push origin --tags",
     "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version patch && git push origin && git push origin --tags",
-    "release:prerelease": "changelog -P && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --prerelease --preid 'beta' && git push origin && git push origin --tags"
+    "release:beta": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --prerelease --preid 'beta' && git push origin && git push origin --tags",
+    "release:nightly": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version --prerelease --preid 'nightly' && git push origin && git push origin --tags"
   },
   "engines": {
     "node": ">=12.0.0"
