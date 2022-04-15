@@ -1,19 +1,11 @@
-oclif-hello-world
-=================
+# global-git-clone
 
-oclif example Hello World CLI
-
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main)
-[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/oclif/hello-world/blob/main/package.json)
+global-git-clone is a command line tool that allows you to clone git repositories to your projects directory following a specific naming convention.
 
 <!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
+* [global-git-clone](#global-git-clone)
 <!-- tocstop -->
-# Usage
+## Usage
 <!-- usage -->
 ```sh-session
 $ npm install -g global-git-clone
@@ -27,51 +19,69 @@ USAGE
 ...
 ```
 <!-- usagestop -->
-# Commands
+## Commands
 <!-- commands -->
-* [`global-git-clone hello PERSON`](#global-git-clone-hello-person)
-* [`global-git-clone hello world`](#global-git-clone-hello-world)
+* [`global-git-clone clone <repo>`](#global-git-clone-clone-repo)
+* [`global-git-clone config`](#global-git-clone-config)
 * [`global-git-clone help [COMMAND]`](#global-git-clone-help-command)
+* [`global-git-clone template`](#global-git-clone-template)
+* [`global-git-clone template add [NAME]`](#global-git-clone-template-add-name)
+* [`global-git-clone template list`](#global-git-clone-template-list)
+* [`global-git-clone template ls`](#global-git-clone-template-ls)
+* [`global-git-clone template remove [NAME]`](#global-git-clone-template-remove-name)
+* [`global-git-clone template rm [NAME]`](#global-git-clone-template-rm-name)
 
-## `global-git-clone hello PERSON`
+## `global-git-clone clone <repo>`
 
-Say hello
+Clone a repository from a remote url, to your local projects directory.
 
 ```
 USAGE
-  $ global-git-clone hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
+  $ global-git-clone clone <repo>
+  $ global-git-clone clone <repo> --template <template>
 
 FLAGS
-  -f, --from=<value>  (required) Whom is saying hello
+  -c, --config=<value>                    custom config file
+  -d, --dry-run                           dry run
+  -l, --loglevel=(debug|info|warn|error)  [default: info] log level
+  -t, --template=<value>                  [default: default] template name or string
+  -v, --verbose                           verbose output
 
 DESCRIPTION
-  Say hello
+  Clone a repository from a remote url, to your local projects directory.
 
 EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
+  $ global-git-clone clone git@gtihub.com:natonathan/global-git-clone.git
+
+  $ global-git-clone clone https://github.com/natonathan/global-git-clone.git --template sdk
+
+  $ global-git-clone clone git@gtihub.com:natonathan/global-git-clone.git --template "~/git/{provider}/{owner}/{repo}"
 ```
 
-_See code: [dist/commands/hello/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.0/dist/commands/hello/index.ts)_
+_See code: [dist/commands/clone.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.0/dist/commands/clone.ts)_
 
-## `global-git-clone hello world`
+## `global-git-clone config`
 
-Say hello world
+Prints the current config file
 
 ```
 USAGE
-  $ global-git-clone hello world
+  $ global-git-clone config [-l debug|info|warn|error] [-v] [-c <value>] [-d]
+
+FLAGS
+  -c, --config=<value>                    custom config file
+  -d, --dry-run                           dry run
+  -l, --loglevel=(debug|info|warn|error)  [default: info] log level
+  -v, --verbose                           verbose output
 
 DESCRIPTION
-  Say hello world
+  Prints the current config file
 
 EXAMPLES
-  $ oex hello world
-  hello world! (./src/commands/hello/world.ts)
+  $ global-git-clone config
 ```
+
+_See code: [dist/commands/config/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.0/dist/commands/config/index.ts)_
 
 ## `global-git-clone help [COMMAND]`
 
@@ -92,4 +102,195 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
+
+## `global-git-clone template`
+
+List all available templates
+
+```
+USAGE
+  $ global-git-clone template [-l debug|info|warn|error] [-v] [-c <value>] [-d] [--columns <value> | -x]
+    [--sort <value>] [--filter <value>] [--output csv|json|yaml |  | [--csv | --no-truncate]] [--no-header | ]
+
+FLAGS
+  -c, --config=<value>                    custom config file
+  -d, --dry-run                           dry run
+  -l, --loglevel=(debug|info|warn|error)  [default: info] log level
+  -v, --verbose                           verbose output
+  -x, --extended                          show extra columns
+  --columns=<value>                       only show provided columns (comma-separated)
+  --csv                                   output is csv format [alias: --output=csv]
+  --filter=<value>                        filter property by partial string matching, ex: name=foo
+  --no-header                             hide table header from output
+  --no-truncate                           do not truncate output to fit screen
+  --output=<option>                       output in a more machine friendly format
+                                          <options: csv|json|yaml>
+  --sort=<value>                          property to sort by (prepend '-' for descending)
+
+DESCRIPTION
+  List all available templates
+
+ALIASES
+  $ global-git-clone template ls
+  $ global-git-clone template list
+
+EXAMPLES
+  $ global-git-clone template
+```
+
+_See code: [dist/commands/template/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.0/dist/commands/template/index.ts)_
+
+## `global-git-clone template add [NAME]`
+
+Add a new template
+
+```
+USAGE
+  $ global-git-clone template add [NAME] [-l debug|info|warn|error] [-v] [-c <value>] [-d] [-f] [-n <value>] [-t
+    <value>]
+
+ARGUMENTS
+  NAME  template name
+
+FLAGS
+  -c, --config=<value>                    custom config file
+  -d, --dry-run                           dry run
+  -f, --force
+  -l, --loglevel=(debug|info|warn|error)  [default: info] log level
+  -n, --name=<value>                      template name
+  -t, --template=<value>                  template string
+  -v, --verbose                           verbose output
+
+DESCRIPTION
+  Add a new template
+
+EXAMPLES
+  $ global-git-clone template add
+```
+
+## `global-git-clone template list`
+
+List all available templates
+
+```
+USAGE
+  $ global-git-clone template list [-l debug|info|warn|error] [-v] [-c <value>] [-d] [--columns <value> | -x]
+    [--sort <value>] [--filter <value>] [--output csv|json|yaml |  | [--csv | --no-truncate]] [--no-header | ]
+
+FLAGS
+  -c, --config=<value>                    custom config file
+  -d, --dry-run                           dry run
+  -l, --loglevel=(debug|info|warn|error)  [default: info] log level
+  -v, --verbose                           verbose output
+  -x, --extended                          show extra columns
+  --columns=<value>                       only show provided columns (comma-separated)
+  --csv                                   output is csv format [alias: --output=csv]
+  --filter=<value>                        filter property by partial string matching, ex: name=foo
+  --no-header                             hide table header from output
+  --no-truncate                           do not truncate output to fit screen
+  --output=<option>                       output in a more machine friendly format
+                                          <options: csv|json|yaml>
+  --sort=<value>                          property to sort by (prepend '-' for descending)
+
+DESCRIPTION
+  List all available templates
+
+ALIASES
+  $ global-git-clone template ls
+  $ global-git-clone template list
+
+EXAMPLES
+  $ global-git-clone template list
+```
+
+## `global-git-clone template ls`
+
+List all available templates
+
+```
+USAGE
+  $ global-git-clone template ls [-l debug|info|warn|error] [-v] [-c <value>] [-d] [--columns <value> | -x]
+    [--sort <value>] [--filter <value>] [--output csv|json|yaml |  | [--csv | --no-truncate]] [--no-header | ]
+
+FLAGS
+  -c, --config=<value>                    custom config file
+  -d, --dry-run                           dry run
+  -l, --loglevel=(debug|info|warn|error)  [default: info] log level
+  -v, --verbose                           verbose output
+  -x, --extended                          show extra columns
+  --columns=<value>                       only show provided columns (comma-separated)
+  --csv                                   output is csv format [alias: --output=csv]
+  --filter=<value>                        filter property by partial string matching, ex: name=foo
+  --no-header                             hide table header from output
+  --no-truncate                           do not truncate output to fit screen
+  --output=<option>                       output in a more machine friendly format
+                                          <options: csv|json|yaml>
+  --sort=<value>                          property to sort by (prepend '-' for descending)
+
+DESCRIPTION
+  List all available templates
+
+ALIASES
+  $ global-git-clone template ls
+  $ global-git-clone template list
+
+EXAMPLES
+  $ global-git-clone template ls
+```
+
+## `global-git-clone template remove [NAME]`
+
+Remove a template
+
+```
+USAGE
+  $ global-git-clone template remove [NAME] [-l debug|info|warn|error] [-v] [-c <value>] [-d] [-n <value>]
+
+ARGUMENTS
+  NAME  template name
+
+FLAGS
+  -c, --config=<value>                    custom config file
+  -d, --dry-run                           dry run
+  -l, --loglevel=(debug|info|warn|error)  [default: info] log level
+  -n, --name=<value>                      template name
+  -v, --verbose                           verbose output
+
+DESCRIPTION
+  Remove a template
+
+ALIASES
+  $ global-git-clone template rm
+
+EXAMPLES
+  $ global-git-clone template remove
+```
+
+## `global-git-clone template rm [NAME]`
+
+Remove a template
+
+```
+USAGE
+  $ global-git-clone template rm [NAME] [-l debug|info|warn|error] [-v] [-c <value>] [-d] [-n <value>]
+
+ARGUMENTS
+  NAME  template name
+
+FLAGS
+  -c, --config=<value>                    custom config file
+  -d, --dry-run                           dry run
+  -l, --loglevel=(debug|info|warn|error)  [default: info] log level
+  -n, --name=<value>                      template name
+  -v, --verbose                           verbose output
+
+DESCRIPTION
+  Remove a template
+
+ALIASES
+  $ global-git-clone template rm
+
+EXAMPLES
+  $ global-git-clone template rm
+```
 <!-- commandsstop -->
