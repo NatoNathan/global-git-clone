@@ -55,7 +55,11 @@
     ],
     "topicSeparator": " ",
     "topics": {},
-    "update": {}
+    "update": {
+      "s3": {
+        "host": "https://cdn.nathantamez.dev/file/natonathan-github-global-git-clone/release"
+      }
+    }
   },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
