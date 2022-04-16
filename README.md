@@ -12,7 +12,7 @@ $ npm install -g global-git-clone
 $ global-git-clone COMMAND
 running command...
 $ global-git-clone (--version)
-global-git-clone/0.1.1-beta.17 darwin-x64 node-v16.13.0
+global-git-clone/0.1.1-beta.18 darwin-x64 node-v16.13.0
 $ global-git-clone --help [COMMAND]
 USAGE
   $ global-git-clone COMMAND
@@ -58,7 +58,7 @@ EXAMPLES
   $ global-git-clone clone git@gtihub.com:natonathan/global-git-clone.git --template "~/git/{provider}/{owner}/{repo}"
 ```
 
-_See code: [dist/commands/clone.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.17/dist/commands/clone.ts)_
+_See code: [dist/commands/clone.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.18/dist/commands/clone.ts)_
 
 ## `global-git-clone config`
 
@@ -81,7 +81,7 @@ EXAMPLES
   $ global-git-clone config
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.17/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.18/dist/commands/config/index.ts)_
 
 ## `global-git-clone help [COMMAND]`
 
@@ -138,7 +138,7 @@ EXAMPLES
   $ global-git-clone template
 ```
 
-_See code: [dist/commands/template/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.17/dist/commands/template/index.ts)_
+_See code: [dist/commands/template/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.18/dist/commands/template/index.ts)_
 
 ## `global-git-clone template add [NAME]`
 
