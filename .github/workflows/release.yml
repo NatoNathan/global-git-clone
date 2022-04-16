@@ -21,7 +21,6 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGELOG.md
           prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
           files: ./release/*
 
@@ -67,15 +66,3 @@ jobs:
         with:
           name: binaries
           path: ./release
-
-  sign-macos:
-    runs-on: macos-11
-    steps:
-      - name: Download binary
-        uses: actions/download-artifact@v3
-        with:
-          name: binaries
-          path: ./release
-      - name: Sign binaries
-        run: |
-          
