@@ -1,3 +1,10 @@
+#### 0.1.2.1 (2022-04-16)
+
+##### Chores
+
+*  added release-platform job (65d62e41)
+*  added release-platform job (dc2c2c74)
+
 #### 0.1.2.0 (2022-04-16)
 
 ##### Bug Fixes
