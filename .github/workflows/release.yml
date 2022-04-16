@@ -37,6 +37,25 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+      - run: yarn install
+      - name: make tarball
+        run: npx oclif pack tarballs
+      - name: Upload tarball to github
+        uses: actions/upload-artifact@v3
+        with:
+          name: tarball
+          path: ./dist
+          retention-days: 5
+
+  upload-tarball:
+    needs: [release-tarball]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
       - name: get CHANNEL
         id: get-channel
         run: |
@@ -52,14 +71,11 @@ jobs:
           node-version: 16.x
           cache: 'yarn'
       - run: yarn install
-      - name: make tarball
-        run: npx oclif pack tarballs
-      - name: Upload tarball to github
-        uses: actions/upload-artifact@v3
+      - name: download tarball
+        uses: actions/download-artifact@v3
         with:
           name: tarball
           path: ./dist
-          retention-days: 5
       - name: Upload tarball s3
         run: |
           npx oclif upload tarballs
