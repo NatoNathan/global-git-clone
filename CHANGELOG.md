@@ -1,0 +1,12 @@
+#### 0.1.1 (2022-04-16)
+
+##### Chores
+
+* **workflows:**
+  *  updated Release (5c45399e)
+  *  added Release and CI (cdbe27f1)
+*  updated tests, still need to work on tests (9476f38e)
+*  removed some un needed test files (177af3f3)
+*  updated readme (df44d02e)
+*  added basic commands (e668bf37)
+
