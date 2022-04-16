@@ -1,3 +1,9 @@
+#### 0.1.2.16 (2022-04-16)
+
+##### Chores
+
+* **workflows:**  updated release (a67c2ce6)
+
 #### 0.1.2.15 (2022-04-16)
 
 ##### Chores
