@@ -1,3 +1,12 @@
+#### 0.1.2.10 (2022-04-16)
+
+##### Chores
+
+* **workflows:**
+  *  updated release with ps script (419cba18)
+  *  updated release (6b2efaff)
+* **tests:**  removed old tests (7b338d53)
+
 #### 0.1.2.9 (2022-04-16)
 
 ##### New Features
