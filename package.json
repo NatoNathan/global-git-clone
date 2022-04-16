@@ -1,6 +1,6 @@
 {
   "name": "global-git-clone",
-  "version": "0.1.1-beta.9",
+  "version": "0.1.1-beta.10",
   "description": "global-git-clone is a command line tool that allows you to clone git repositories to your projects directory following a specific naming convention.",
   "author": "Nathan Tamez",
   "bin": {
