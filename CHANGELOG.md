@@ -1,3 +1,9 @@
+#### 0.1.2.3 (2022-04-16)
+
+##### Chores
+
+*  updated release-platform job (fbe19d3c)
+
 #### 0.1.2.2 (2022-04-16)
 
 ##### Chores
