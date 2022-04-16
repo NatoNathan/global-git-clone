@@ -20,7 +20,6 @@ jobs:
 
   release-npm:
     runs-on: ubuntu-20.04
-    needs: [release]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
@@ -31,19 +30,18 @@ jobs:
       - name: Publish to npm
         run: yarn publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NPM_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   release-tarball:
     runs-on: ubuntu-20.04
-    needs: [release]
     steps:
       - uses: actions/checkout@v2
       - name: get CHANNEL
         id: get-channel
         run: |
-          if [[ ${{ github.ref }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+          if [[ ${{ contains(github.ref, '-beta') }} ]]; then
             echo "CHANNEL=beta" >> $GITHUB_ENV
-          elif [[ ${{ github.ref }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+-nightly\.[0-9]+$ ]]; then
+          elif [[ ${{ contains(github.ref, '-nightly') }} ]]; then
             echo "CHANNEL=nightly" >> $GITHUB_ENV
           else
             echo "CHANNEL=stable" >> $GITHUB_ENV
