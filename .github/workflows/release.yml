@@ -53,6 +53,7 @@ jobs:
 
   release-platform:
     runs-on: ${{ matrix.os }}
+    needs: [release]
     strategy:
       matrix:
         include:
