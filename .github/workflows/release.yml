@@ -10,8 +10,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-20.04
-    env:
-      GITHUB_PRERELEASE: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16.x
@@ -31,7 +29,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
-          prerelease: ${{GITHUB_PRERELEASE}}
+          prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
 
   release-npm:
     runs-on: ubuntu-20.04
@@ -101,8 +99,6 @@ jobs:
             os: macos-11
           - platform: win
             os: windows-2022
-    env:
-      GITHUB_PRERELEASE: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
     steps:
       - name: get CHANNEL
         id: get-channel
