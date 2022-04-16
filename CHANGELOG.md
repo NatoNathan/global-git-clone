@@ -1,3 +1,9 @@
+#### 0.1.2.2 (2022-04-16)
+
+##### Chores
+
+*  added release-platform job (081e1b29)
+
 #### 0.1.2.1 (2022-04-16)
 
 ##### Chores
