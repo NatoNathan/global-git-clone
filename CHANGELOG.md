@@ -1,3 +1,9 @@
+#### 0.1.2.11 (2022-04-16)
+
+##### Chores
+
+* **workflows:**  updated release with ps script (4afc2444)
+
 #### 0.1.2.10 (2022-04-16)
 
 ##### Chores
