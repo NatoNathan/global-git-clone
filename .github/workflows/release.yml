@@ -99,7 +99,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: get CHANNEL
-        id: get-channel
+        id: get-channel-unix
+        if: ${{ matrix.platform }} != 'win'
         run: |
           if [[ ${{ contains(github.ref, '-beta') }} ]]; then
             echo "CHANNEL=beta" >> $GITHUB_ENV
@@ -108,6 +109,22 @@ jobs:
           else
             echo "CHANNEL=stable" >> $GITHUB_ENV
           fi
+      - name: get CHANNEL
+        id: get-channel-win
+        if: ${{ matrix.platform }} == 'win'
+        run: |
+          if (${{ contains(github.ref, '-beta') }})
+          {
+            echo "CHANNEL=beta" >> $GITHUB_ENV
+          }
+          elseif (${{ contains(github.ref, '-nightly') }} )
+          {
+            echo "CHANNEL=nightly" >> $GITHUB_ENV
+          }
+          else
+          {
+            echo "CHANNEL=stable" >> $GITHUB_ENV
+          }
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
