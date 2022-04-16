@@ -15,8 +15,8 @@ jobs:
     needs: [ci]
     runs-on: ubuntu-20.04
     env:
-      GITHUB_PRERELEASE: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly') || contains(github.ref, '-canary') }}
-
+      GITHUB_PRERELEASE: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
+      CHANNEL: ${{ if contains(github.ref, '-beta') { "beta" } else if contains(github.ref, '-nightly') { "nightly" } else { "stable" } }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16.x
@@ -32,12 +32,50 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: make tarball
         run: npx oclif pack tarballs
-      - name: Move tarball to release folder
+      - name: Upload tarball to github
+        uses: actions/upload-artifact@v3
+        with:
+          name: workspace
+          path: .
+      - name: Upload tarball s3
         run: |
-          mkdir -p release
-          mv ./dist/global-git-clone-* ./release
-      - uses: wilsonzlin/setup-b2@v2
-      - name: Upload tarball to B2
+          npx oclif upload tarballs
+          npx oclif oclif promote --channel=${{ CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.B2_APP_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.B2_APP_KEY }}
+          AWS_S3_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: CHANGELOG.md
+          prerelease: ${{GITHUB_PRERELEASE}}
+
+  release-platform:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - platform: macos
+            os: macos-11
+          - platform: win
+            os: windows-2022
+    env:
+      GITHUB_PRERELEASE: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
+      CHANNEL: ${{ if contains(github.ref, '-beta') { "beta" } else if contains(github.ref, '-nightly') { "nightly" } else { "stable" } }}
+    steps:
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+      - uses: actions/download-artifact@v3
+        with:
+          name: workspace
+      - name: Install dependencies
+        run: yarn install
+      - name: pack ${{ matrix.platform }}
         run: |
-          b2 authorize-account ${{ secrets.B2_APP_KEY_ID }} ${{ secrets.B2_APP_KEY }}
-          b2 sync ./release/ b2://${{ secrets.B2_BUCKET_NAME }}/release/
+          npx oclif pack ${{ matrix.platform }}
+          npx oclif oclif promote --${{matrix.platform}} --channel=${{ CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
+

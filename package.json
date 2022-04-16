@@ -55,8 +55,12 @@
     ],
     "topicSeparator": " ",
     "topics": {},
+    "macos": {
+      "identifier": "dev.nathantamez.global-git-clone"
+    },
     "update": {
       "s3": {
+        "bucket": "github-global-git-clone",
         "host": "https://cdn.nathantamez.dev/file/natonathan-github-global-git-clone/release"
       }
     }
