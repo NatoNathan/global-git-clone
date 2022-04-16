@@ -85,7 +85,7 @@ jobs:
       - name: get CHANNEL
         id: get-channel
         run: |
-          iif [[ ${{ contains(github.ref, '-beta') }} ]]; then
+          if [[ ${{ contains(github.ref, '-beta') }} ]]; then
             echo "CHANNEL=beta" >> $GITHUB_ENV
           elif [[ ${{ contains(github.ref, '-nightly') }} ]]; then
             echo "CHANNEL=nightly" >> $GITHUB_ENV
@@ -106,5 +106,8 @@ jobs:
       - name: pack ${{ matrix.platform }}
         run: |
           npx oclif pack ${{ matrix.platform }}
+      - name: Upload tarball to s3
+        run: |
+          npx oclif upload ${{ matrix.platform }}
           npx oclif oclif promote --${{matrix.platform}} --channel=${{ env.CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
 
