@@ -9,6 +9,7 @@ on:
 
 jobs:
   release:
+    needs: [release-npm, release-platform]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -84,9 +85,9 @@ jobs:
       - name: get CHANNEL
         id: get-channel
         run: |
-          if [[ ${{ github.ref }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+          iif [[ ${{ contains(github.ref, '-beta') }} ]]; then
             echo "CHANNEL=beta" >> $GITHUB_ENV
-          elif [[ ${{ github.ref }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+-nightly\.[0-9]+$ ]]; then
+          elif [[ ${{ contains(github.ref, '-nightly') }} ]]; then
             echo "CHANNEL=nightly" >> $GITHUB_ENV
           else
             echo "CHANNEL=stable" >> $GITHUB_ENV
