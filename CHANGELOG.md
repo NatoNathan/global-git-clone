@@ -1,3 +1,13 @@
+#### 0.1.2.0 (2022-04-16)
+
+##### Bug Fixes
+
+*  fixed a workflow issue (71d46594)
+
+##### Other Changes
+
+* NatoNathan/global-git-clone (994a63d7)
+
 #### 0.1.1 (2022-04-16)
 
 ##### Chores
