@@ -47,17 +47,13 @@ jobs:
           node-version: 16.x
           cache: 'yarn'
       - run: yarn install
+      - run: yarn build
       - name: Set up QEMU
         id: qemu
         uses: docker/setup-qemu-action@v1
         with:
           image: tonistiigi/binfmt:latest
           platforms: amd64,arm64
-      - name: install ldid
-        run: |
-          curl -L https://github.com/jesec/ldid-static/releases/download/v2.1.4/ldid-amd64 -o ldid
-          chmod +x ldid
-          export PATH=$PWD:$PATH
       - name: Build binaries
         run: yarn package
       - name: upload binaries
