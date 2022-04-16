@@ -9,15 +9,21 @@ on:
 
 jobs:
   release:
-    needs: [release-npm, release-platform, upload-tarball]
+    needs: [release-npm, release-binary]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+      - name: Download binary
+        uses: actions/download-artifact@v3
+        with:
+          name: binaries
+          path: ./release
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
           prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
+          files: ./release/*
 
   release-npm:
     runs-on: ubuntu-20.04
@@ -33,7 +39,7 @@ jobs:
         env:
           NPM_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
-  release-tarball:
+  release-binary:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -42,105 +48,22 @@ jobs:
           node-version: 16.x
           cache: 'yarn'
       - run: yarn install
-      - name: make tarball
-        run: npx oclif pack tarballs
-      - name: Upload tarball to github
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: amd64,arm64
+      - name: install ldid
+        run: |
+          curl -L https://github.com/jesec/ldid-static/releases/download/v2.1.4/ldid-amd64 -o ldid
+          chmod +x ldid
+      - name: Build binaries
+        run: yarn package
+      - name: upload binaries
+        id: upload-binaries
         uses: actions/upload-artifact@v3
         with:
-          name: tarball
-          path: ./dist
-          retention-days: 5
-
-  upload-tarball:
-    needs: [release-tarball]
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: get CHANNEL
-        id: get-channel
-        run: |
-          if [[ ${{ contains(github.ref, '-beta') }} ]]; then
-            echo "CHANNEL=beta" >> $GITHUB_ENV
-          elif [[ ${{ contains(github.ref, '-nightly') }} ]]; then
-            echo "CHANNEL=nightly" >> $GITHUB_ENV
-          else
-            echo "CHANNEL=stable" >> $GITHUB_ENV
-          fi
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: 'yarn'
-      - run: yarn install
-      - name: download tarball
-        uses: actions/download-artifact@v3
-        with:
-          name: tarball
-          path: ./dist
-      - name: Upload tarball s3
-        run: |
-          npx oclif upload tarballs
-          npx oclif oclif promote --channel=${{ env.CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.B2_APP_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.B2_APP_KEY }}
-          AWS_S3_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
-
-
-  release-platform:
-    runs-on: ${{ matrix.os }}
-    needs: [release-tarball]
-    strategy:
-      matrix:
-        include:
-          - platform: macos
-            os: macos-11
-          - platform: win
-            os: windows-2022
-    steps:
-      - uses: actions/checkout@v2
-      - name: get CHANNEL
-        id: get-channel-unix
-        if: ${{ matrix.platform  != 'win' }}
-        run: |
-          if [[ ${{ contains(github.ref, '-beta') }} ]]; then
-            echo "CHANNEL=beta" >> $GITHUB_ENV
-          elif [[ ${{ contains(github.ref, '-nightly') }} ]]; then
-            echo "CHANNEL=nightly" >> $GITHUB_ENV
-          else
-            echo "CHANNEL=stable" >> $GITHUB_ENV
-          fi
-      - name: get CHANNEL
-        id: get-channel-win
-        if: ${{ matrix.platform == 'win' }}
-        run: |
-          if (${{ contains(github.ref, '-beta') }})
-          {
-            "CHANNEL=beta" >> $GITHUB_ENV
-          }
-          elseif (${{ contains(github.ref, '-nightly') }} )
-          {
-            "CHANNEL=nightly" >> $GITHUB_ENV
-          }
-          else
-          {
-            "CHANNEL=stable" >> $GITHUB_ENV
-          }
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: 'yarn'
-      - uses: actions/download-artifact@v3
-        with:
-          name: tarball
-          path: ./dist
-      - name: Install dependencies
-        run: yarn install
-      - name: pack ${{ matrix.platform }}
-        run: |
-          npx oclif pack ${{ matrix.platform }}
-      - name: Upload tarball to s3
-        run: |
-          npx oclif upload ${{ matrix.platform }}
-          npx oclif oclif promote --${{matrix.platform}} --channel=${{ env.CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
+          name: binaries
+          path: ./release
 

@@ -40,6 +40,7 @@
     "globby": "^11",
     "mocha": "^9",
     "oclif": "^3",
+    "pkg": "^5.6.0",
     "shx": "^0.3.3",
     "ts-node": "^10.2.1",
     "tslib": "^2.3.1",
@@ -50,20 +51,18 @@
     "dirname": "global-git-clone",
     "commands": "./dist/commands",
     "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-update"
+      "@oclif/plugin-help"
     ],
     "topicSeparator": " ",
     "topics": {},
     "macos": {
       "identifier": "dev.nathantamez.global-git-clone"
-    },
-    "update": {
-      "s3": {
-        "bucket": "natonathan-github-global-git-clone",
-        "host": "https://cdn.nathantamez.dev/file/natonathan-github-global-git-clone/"
-      }
     }
+  },
+  "pkg": {
+    "scripts": "./dist/**/*.js",
+    "targets": "win-x64,linux-x64,linux-arm64,macos-x64,macos-arm64",
+    "outputPath": "./release"
   },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
@@ -73,6 +72,7 @@
     "prepack": "yarn build && oclif manifest && oclif readme",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md",
+    "package": "pkg .",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version major && git push origin && git push origin --tags",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version minor && git push origin && git push origin --tags",
     "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && yarn version patch && git push origin && git push origin --tags",
