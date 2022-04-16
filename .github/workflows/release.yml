@@ -12,19 +12,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: 'yarn'
-      - name: Install dependencies
-        run: yarn install
-      - name: Upload tarball to github
-        uses: actions/upload-artifact@v3
-        with:
-          name: release
-          path: ./dist
-          retention-days: 5
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
@@ -41,10 +28,6 @@ jobs:
           node-version: 16.x
           cache: 'yarn'
           registry: https://registry.npmjs.org/
-      - uses: actions/download-artifact@v3
-        with:
-          name: release
-          path: ./dist
       - run: yarn install
       - name: Publish to npm
         run: yarn publish
@@ -70,10 +53,6 @@ jobs:
         with:
           node-version: 16.x
           cache: 'yarn'
-      - uses: actions/download-artifact@v3
-        with:
-          name: release
-          path: ./dist
       - run: yarn install
       - name: make tarball
         run: npx oclif pack tarballs
