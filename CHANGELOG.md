@@ -1,3 +1,9 @@
+#### 0.1.2.13 (2022-04-16)
+
+##### Chores
+
+* **workflows:**  updated release with ps script (9aa5a506)
+
 #### 0.1.2.12 (2022-04-16)
 
 ##### Chores
