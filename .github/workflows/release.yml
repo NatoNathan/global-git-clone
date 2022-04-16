@@ -8,15 +8,10 @@ on:
       - 'v*.*.*-nightly.*'
 
 jobs:
-  ci:
-    uses: ./.github/workflows/continuous_integration.yml
-
   release:
-    needs: [ci]
     runs-on: ubuntu-20.04
     env:
       GITHUB_PRERELEASE: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
-      CHANNEL: ${{ if contains(github.ref, '-beta') { "beta" } else if contains(github.ref, '-nightly') { "nightly" } else { "stable" } }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 16.x
@@ -26,34 +21,79 @@ jobs:
           cache: 'yarn'
       - name: Install dependencies
         run: yarn install
-      - name: Publish to npm
-        run: yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: make tarball
-        run: npx oclif pack tarballs
       - name: Upload tarball to github
         uses: actions/upload-artifact@v3
         with:
-          name: workspace
-          path: .
-      - name: Upload tarball s3
-        run: |
-          npx oclif upload tarballs
-          npx oclif oclif promote --channel=${{ CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.B2_APP_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.B2_APP_KEY }}
-          AWS_S3_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+          name: release
+          path: ${{ github.workspace }}
+          retention-days: 5
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
           prerelease: ${{GITHUB_PRERELEASE}}
 
+  release-npm:
+    runs-on: ubuntu-20.04
+    needs: [release]
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+          registry: https://registry.npmjs.org/
+      - uses: actions/download-artifact@v3
+        with:
+          name: release
+      - run: yarn install
+      - name: Publish to npm
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  release-tarball:
+    runs-on: ubuntu-20.04
+    needs: [release]
+    steps:
+      - name: get CHANNEL
+        id: get-channel
+        run: |
+          if [[ ${{ github.ref }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+            echo "CHANNEL=beta" >> $GITHUB_ENV
+          elif [[ ${{ github.ref }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+-nightly\.[0-9]+$ ]]; then
+            echo "CHANNEL=nightly" >> $GITHUB_ENV
+          else
+            echo "CHANNEL=stable" >> $GITHUB_ENV
+          fi
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+      - uses: actions/download-artifact@v3
+        with:
+          name: release
+      - run: yarn install
+      - name: make tarball
+        run: npx oclif pack tarballs
+      - name: Upload tarball to github
+        uses: actions/upload-artifact@v3
+        with:
+          name: tarball
+          path: ${{ github.workspace }}
+          retention-days: 5
+      - name: Upload tarball s3
+        run: |
+          npx oclif upload tarballs
+          npx oclif oclif promote --channel=${{ env.CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.B2_APP_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.B2_APP_KEY }}
+          AWS_S3_ENDPOINT: ${{ secrets.B2_ENDPOINT }}
+
+
   release-platform:
     runs-on: ${{ matrix.os }}
-    needs: [release]
+    needs: [release-tarball]
     strategy:
       matrix:
         include:
@@ -63,8 +103,17 @@ jobs:
             os: windows-2022
     env:
       GITHUB_PRERELEASE: ${{ contains(github.ref, '-beta') || contains(github.ref, '-nightly')}}
-      CHANNEL: ${{ if contains(github.ref, '-beta') { "beta" } else if contains(github.ref, '-nightly') { "nightly" } else { "stable" } }}
     steps:
+      - name: get CHANNEL
+        id: get-channel
+        run: |
+          if [[ ${{ github.ref }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+            echo "CHANNEL=beta" >> $GITHUB_ENV
+          elif [[ ${{ github.ref }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+-nightly\.[0-9]+$ ]]; then
+            echo "CHANNEL=nightly" >> $GITHUB_ENV
+          else
+            echo "CHANNEL=stable" >> $GITHUB_ENV
+          fi
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
@@ -72,11 +121,11 @@ jobs:
           cache: 'yarn'
       - uses: actions/download-artifact@v3
         with:
-          name: workspace
+          name: tarball
       - name: Install dependencies
         run: yarn install
       - name: pack ${{ matrix.platform }}
         run: |
           npx oclif pack ${{ matrix.platform }}
-          npx oclif oclif promote --${{matrix.platform}} --channel=${{ CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
+          npx oclif oclif promote --${{matrix.platform}} --channel=${{ env.CHANNEL }} --version=${{ github.ref_name }} --sha=${{ github.sha }}
 
