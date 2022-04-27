@@ -12,7 +12,7 @@ $ npm install -g global-git-clone
 $ global-git-clone COMMAND
 running command...
 $ global-git-clone (--version)
-global-git-clone/0.1.1-beta.20 darwin-x64 node-v16.13.0
+global-git-clone/0.1.1-beta.21 darwin-x64 node-v16.13.0
 $ global-git-clone --help [COMMAND]
 USAGE
   $ global-git-clone COMMAND
@@ -21,6 +21,7 @@ USAGE
 <!-- usagestop -->
 ## Commands
 <!-- commands -->
+* [`global-git-clone autocomplete [SHELL]`](#global-git-clone-autocomplete-shell)
 * [`global-git-clone clone <repo>`](#global-git-clone-clone-repo)
 * [`global-git-clone config`](#global-git-clone-config)
 * [`global-git-clone help [COMMAND]`](#global-git-clone-help-command)
@@ -30,6 +31,35 @@ USAGE
 * [`global-git-clone template ls`](#global-git-clone-template-ls)
 * [`global-git-clone template remove [NAME]`](#global-git-clone-template-remove-name)
 * [`global-git-clone template rm [NAME]`](#global-git-clone-template-rm-name)
+
+## `global-git-clone autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ global-git-clone autocomplete [SHELL] [-r]
+
+ARGUMENTS
+  SHELL  shell type
+
+FLAGS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+DESCRIPTION
+  display autocomplete installation instructions
+
+EXAMPLES
+  $ global-git-clone autocomplete
+
+  $ global-git-clone autocomplete bash
+
+  $ global-git-clone autocomplete zsh
+
+  $ global-git-clone autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.2.0/src/commands/autocomplete/index.ts)_
 
 ## `global-git-clone clone <repo>`
 
@@ -58,7 +88,7 @@ EXAMPLES
   $ global-git-clone clone git@gtihub.com:natonathan/global-git-clone.git --template "~/git/{provider}/{owner}/{repo}"
 ```
 
-_See code: [dist/commands/clone.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.20/dist/commands/clone.ts)_
+_See code: [dist/commands/clone.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.21/dist/commands/clone.ts)_
 
 ## `global-git-clone config`
 
@@ -81,7 +111,7 @@ EXAMPLES
   $ global-git-clone config
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.20/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.21/dist/commands/config/index.ts)_
 
 ## `global-git-clone help [COMMAND]`
 
@@ -138,7 +168,7 @@ EXAMPLES
   $ global-git-clone template
 ```
 
-_See code: [dist/commands/template/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.20/dist/commands/template/index.ts)_
+_See code: [dist/commands/template/index.ts](https://github.com/NatoNathan/global-git-clone/blob/v0.1.1-beta.21/dist/commands/template/index.ts)_
 
 ## `global-git-clone template add [NAME]`
 
