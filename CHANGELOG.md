@@ -1,3 +1,11 @@
+#### 0.1.2.20 (2022-04-27)
+
+##### Chores
+
+*  added autocomplete (e792d09d)
+*  added autocomplete (a826f247)
+*  updated workflow (91949dda)
+
 #### 0.1.2.19 (2022-04-16)
 
 ##### Chores
