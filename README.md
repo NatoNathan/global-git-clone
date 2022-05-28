@@ -1,5 +1,8 @@
 # global-git-clone
 
+I just released [global_clone](https://github.com/NatoNathan/global_clone), a Rust implementation of this project. I would recommend that over this one.
+However I will keep this one somewhat maintained, and will accept issues and pull requests.
+
 global-git-clone is a command line tool that allows you to clone git repositories to your projects directory following a specific naming convention.
 
 <!-- toc -->
